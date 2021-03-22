@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>HTML Quiz</title>
+        <style>
+        
+        * {
+    font-family: monospace;
+    font-weight: bold;
+    box-sizing: border-box;
+    user-select: none;
+}
+body {
+    margin: 0;
+    background-color:pink;
+}
+#root {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+.task {
+    width: 300px;
+    max-width: 90%;
+    background: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+    animation: test2 800ms;
+}
+.task_question {
+    margin-top: 40px;
+}
+.task_answers {
+    margin-top: 40px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(1, 1fr);
+}
+.task_btn {
+    background: white;
+}
+.task_btn:active {
+    background: #d8d8d8;
+}
+.task_submit {
+    margin-top: 40px;
+    display: inline-block;
+    width: 100%;
+    background: #00c800;
+    color: red;
+}
+.task_submit:hover {
+    background: #00a000;
+}
+.task button {
+    border: none;
+    padding: 10px;
+    transition: 200ms background;
+    box-shadow: 1px 1px 4px 1px #b8b8b8;
+    outline: none;
+}
+.task_btn_selected {
+    background: #d8d8d8 !important;
+}
+@keyframes test {
+    to {
+        transform: translate(100vw, 0);
+    }
+}
+.task_result {
+    font-size: 32px;
+    animation: test3 2000ms;
+    color: red;
+}
+.task_result_correct {
+    color: #00c800 !important;
+}
+@keyframes test2 {
+    from {
+        transform: translate(-100vw, 0);
+    }
+    to {
+        transform: translate(0, 0);
+    }
+}
+@keyframes test3 {
+    from {
+        transform: translate(-100vw, 0);
+    }
+    40% {
+        transform: translate(0, 0);
+    }
+    60% {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(100vw, 0);
+    }
+}
+.score {
+    font-size: 30px;
+}
+.title {
+    font-size: 30px;
+}
+.start {
+    margin-top: 40px;
+    display: inline-block;
+    font-size: 20px;
+}
+        
+        
+        </style>
+        
+        
+        
+    </head>
+    <body>
+   <center> <h1> Jupitor Informatics </h1></center>
+  
+        <div id="root"></div>
+        
+        <script>
+            
+            "use strict";
+const data=[
+    [
+        "HTML stands for",
+        [
+           "HyperText Mark Language",
+           "HighText Mark Language",
+           "HyperText Marking Language",
+           "HyperText Markup Language",
+        ],
+        3
+    ],
+    [
+        " Which of the following element is responsible for making the text bold in HTML?",
+        [
+            "<bold>",
+            "<b>",
+            "<p>",
+            "<br>"
+        ],
+        1
+    ],
+    [
+        " Largest heading in html ",
+        [
+            "<h7>",
+            "<h6>",
+            "<h1>",
+            "<h2>"
+        ],
+        2
+    ],
+    [
+        "Which of the following tag is used to insert a line-break in HTML?",
+        [
+            "<b>",
+            "<bl>",
+            "<break>",
+            "<br>"
+        ],
+        3
+    ],
+    [
+        "Which character is used to represent the closing of a tag in HTML?",
+        [
+            "/",
+            "!",
+            ">",
+            "√"
+        ],
+        0
+    ],
+    [
+        "How to create an ordered list in HTML",
+        [
+            "<ol>",
+            "<ul>",
+            "<order>",
+            "<l>"
+        ],
+        0
+    ],
+    [
+        "How to insert an image in HTML?",
+        [
+            "<img url = file name ",
+            "<img source = file name",
+            "<img src = file name",
+            "<image> "
+        ],
+        2
+    ],
+    [
+        "How to create a checkbox in HTML?",
+        [
+            "<input type = check>",
+            "<input type = box> ",
+            "<checkbox>",
+            "<input type = checkbox>"
+        ],
+        3
+    ],
+    [
+        "HTML tags are enclosed in-",
+        [
+            "@ and a",
+            "* and *",
+            "< and >",
+            "{ and }"
+        ],
+        2
+    ],
+    [
+        "The hr tag in HTML is used for -",
+        [
+            "horizontal line",
+            "new row",
+            "vertical line",
+            "new line"
+        ],
+        0
+    ],
+    [
+        "Which of the following HTML tag is used to display the text with scrolling effect?",
+        [
+            "<scroll>",
+            "<div>",
+            "<merquee>",
+            "<marquee>"
+        ],
+        3
+    ]
+];
+let counter=0;
+let score=0;
+
+let root;
+
+class Task {
+constructor(task) {
+    this.question=task[0];
+    this.answers=task[1];
+    this.correct=task[2];
+    this.selected=-1;
+    this.render();
+}
+render() {
+    let container=document.createElement("div");
+    container.classList="task";
+    container.innerHTML+=`<div class="task_question">${this.question}</div>`;
+    let answerBox=document.createElement("div");
+    answerBox.classList="task_answers";
+    this.answers.forEach((a,i)=>{
+        let btn=document.createElement("button");
+        btn.classList="task_btn";
+        btn.innerText=a;
+        btn.onclick=()=>{
+            this.selectAnswer(i);
+        }
+        answerBox.appendChild(btn);
+    });
+    container.appendChild(answerBox);
+    let submitBtn=document.createElement("button");
+    submitBtn.classList="task_submit";
+    submitBtn.innerText="Submit";
+    submitBtn.onclick=()=>{
+        this.submitAnswer();
+    }
+    container.appendChild(submitBtn);
+    render(container,root);
+}
+selectAnswer(idx) {
+    let btn=document.getElementsByClassName("task_btn");
+    for(let i=0;i<btn.length;i++) {
+        if(idx==i) {
+            btn[i].classList.add("task_btn_selected");
+        } else {
+            btn[i].classList.remove("task_btn_selected");
+        }
+    }
+    this.selected=idx;
+}
+submitAnswer() {
+    let isCorrect=this.selected==this.correct;
+    if(isCorrect) score++;
+    let msg=`<div class="task_result ${isCorrect?'task_result_correct':''}">${isCorrect?"Correct!":"Wrong!"}</div>`;
+    setTimeout(()=>{
+        root.innerHTML=msg;
+    },800-10);
+    setTimeout(()=>{
+        (++counter)>=data.length?root.innerHTML=`<div class="score">You scored ${Math.round(score/data.length*100)} %</div>`:new Task(data[counter]);
+    },2800-10);
+    document.querySelector(".task").style.animation="test 800ms";
+}
+}
+
+const render=(el,p)=>{
+    p.innerHTML="";
+    p.appendChild(el);
+}
+
+onload=()=>{
+    root=document.getElementById("root");
+    root.innerHTML=`
+        <div align="center">
+            <div class="title"> HTML Quiz</div>
+            <button class="start">Start</button>
+        </div>
+    `;    document.querySelector(".start").onclick=function() {
+        new Task(data[counter]);
+    }
+}            
+            
+            
+        </script>
+        
+    </body>
+</html>
