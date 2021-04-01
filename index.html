@@ -59,6 +59,33 @@ color:white;
     </head>
     <body bgcolor = "pink">
    <h2> <b>HTML</b></h2>
+
+
+<label for="theme">select theme</label>
+<select id="theme">
+  <option value="white">white</option>
+  <option value="black">black</option>
+</select>  
+
+
+
+
+<script>
+    var select=document.querySelector('select');
+var html=document.querySelector('html');
+select.onchange=function ()
+{
+  select.value=='black' ? update('black','white'):update('white','black');
+}
+function update(bgcolor,textcolor)
+{
+  html.style.backgroundColor=bgcolor;
+  html.style.color=textcolor;
+}
+</script>
+
+
+
     
     <script>
       
