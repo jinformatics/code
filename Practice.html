@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/mode-html.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/mode-javascript.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/mode-css.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/theme-dracula.js"></script>
+ 
+ <style>
+   
+
+* {
+ -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+}
+*:focus {
+ outline: none;
+}
+body {
+ font-style: sans-serif;
+ font-size: 18px;
+ margin: 0px;
+}
+body,
+html {
+ height: 100%;
+}
+*::-webkit-scrollbar {
+ display: none;
+}
+.code-edit {
+ height: 100%;
+ width: 100%;
+}
+.tabs {
+ background-color: #000;
+ display: table;
+ height: 43px;
+ width: 100%;
+}
+.tab {
+ cursor: pointer;
+ display: table-cell;
+ padding: 10px;
+ text-align: center;
+ width: calc(100% / 3);
+}
+.tab[status="active"] {
+ background-color: #333;
+ color: #fff;
+}
+.tab:not([status="active"]) {
+ background-color: #222;
+ color: #999;
+}
+.code {
+ background: green;
+ height: calc((100% / 2) - 43px);
+ width: 100%;
+}
+.code > div[status="active"] {
+ display: block;
+}
+.code > div:not([status="active"]) {
+ display: none;
+}
+.code > div {
+ height: 100%;
+}
+textarea {
+ background-color: #444;
+ border: none;
+ color: #fff;
+ display: block;
+ height: 100%;
+ margin: 0px;
+ overflow: scroll;
+ padding: 5px;
+ resize: none;
+ white-space: nowrap;
+ width: 100%;
+}
+#output {
+ border: none;
+ display: block;
+ height: 50%;
+ overflow-x: hidden;
+ overflow-y: scroll;
+ width: 100%;
+}
+.tabs, #output {
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+}
+   
+button{
+  width:44%;
+  color:blue;
+  background-color:grey;
+  padding:10px;
+  margin:5px;
+}
+   
+ </style>
+ </head>
+ <body>
+   <script>
+     
+     
+
+
+var html, css, js, clear;
+
+$(document).ready(function(){
+  js = ace.edit("js", {
+      mode: "ace/mode/javascript",
+      theme: "ace/theme/dracula"
+  });
+  css = ace.edit("css", {
+      mode: "ace/mode/css",
+      theme: "ace/theme/dracula"
+  });
+  html = ace.edit("html", {
+      mode: "ace/mode/html",
+      theme: "ace/theme/dracula"
+  });
+  
+  $("[data-tab]").click(function(){
+  $(this).attr("status", "active")
+  .siblings().attr("status", "inactive");
+  $tab = $(this).attr("data-tab");
+  $("[tab]").each(function(){
+   if ($(this).attr("tab") === $tab) {
+    $(this).attr("status", "active")
+    .siblings().attr("status", "inactive");
+   }
+  });
+ });
+ html.session.on("change", onchange);
+ css.session.on("change", onchange);
+ js.session.on("change", onchange);
+});
+
+function onchange () {
+    if(!clear) {
+    clear = $("#output").contents().find("head").html();
+    //onsole.log(clear)
+    }
+    var $body = html.getValue();
+    var $css  = css.getValue();
+    var $js   = js.getValue();
+    $("#output").contents().find("head").html(clear);
+    $("#output").contents().find("head").append("<style>" + $css + "</style>");
+    $("#output").contents().find("body").html($body);
+    $("#output").contents().find("body").append("<script>" + $js + "</" + "script>");
+}
+     
+     
+   </script>
+   
+   
+   
+   
+   
+  <div class="code-edit">
+   <div class="tabs">
+    <div class="tab" data-tab="html" status="active">HTML</div>
+    <div class="tab" data-tab="css">CSS</div>
+    <div class="tab" data-tab="js">JS</div>
+   </div>
+   <div class="code">
+    <div tab="html" status="active" id="html"></div>
+    <div tab="css" id="css"></div>
+    <div tab="js" id="js"></div>
+   </div>
+   <div>
+     <button><a href="https://drive.google.com/file/d/1ivwWBIKYF138t46_lHtnC-sjAV7bW8tU/view?usp=drivesdk">Notes</a></button>
+     <button>Quiz</button>
+   </div>
+   <iframe id="output"></iframe>
+   
+  </div>
+ </body>
+</html>
